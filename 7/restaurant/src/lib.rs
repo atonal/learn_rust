@@ -38,12 +38,44 @@ mod back_of_house {
     fn cook_order() {}
 }
 
+// absolut use. When pub, the user of this crate also can use it
+pub use crate::front_of_house::hosting;
+
+// relative use
+// use self::front_of_house::hosting;
+
+// not idiomatic for functions: unclear where add_to_waitlist is defined
+// use crate::front_of_house::hosting::add_to_waitlist;
+
+// but idiomatic for structs, enums etc.
+use std::collections::HashMap;
+
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+// nested paths in use:
+// use std::cmp::Ordering;
+// use std::io;
+// same as:
+use std::{cmp::Ordering, io};
+
+// also:
+// use std::io;
+// use std::io::Write;
+// same as:
+// use std::io::{self, Write};
+
+// glob:
+use std::collections::*;
+
 pub fn eat_at_restaurant() {
     // absolute path
     crate::front_of_house::hosting::add_to_waitlist();
 
     // relative path
     front_of_house::hosting::add_to_waitlist();
+
+    hosting::add_to_waitlist();
 
     let mut meal = back_of_house::Breakfast::summer("Rye");
     meal.toast = String::from("Wheat");
