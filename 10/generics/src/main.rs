@@ -21,7 +21,7 @@ struct Point2<T, U> {
 }
 
 impl<T, U> Point2<T, U> {
-    fn mixup<V, W>(self, other: &Point2<V, W>) -> Point2<T, W> {
+    fn mixup<V, W>(self, other: Point2<V, W>) -> Point2<T, W> {
         Point2 {
             x: self.x,
             y: other.y,
@@ -29,12 +29,12 @@ impl<T, U> Point2<T, U> {
     }
 }
 
-fn largest<T>(list: &[T]) -> &T {
-    let mut largest = &list[0];
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
 
-    for number in list {
-        if number > largest {
-            largest = number;
+    for &item in list {
+        if item > largest {
+            largest = item;
         }
     }
     largest
