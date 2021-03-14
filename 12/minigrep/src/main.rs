@@ -1,13 +1,19 @@
-use std::{env, fs};
+use std::{env, process};
+
+use minigrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let query = &args[1];
-    let filename = &args[2];
-    println!("searching for: {}", query);
-    println!("in file: {}", filename);
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    let contents = fs::read_to_string(filename).expect("Error reading the file");
+    println!("searching for: {}", config.query);
+    println!("in file: {}", config.filename);
 
-    println!("with text:\n{}", contents);
+    if let Err(e) = minigrep::run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    }
 }
